@@ -26,11 +26,10 @@ public class BulkTrackingController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<byte[]> handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
-        MultipartFile file1 = this.bulkTrackingService.getResultFile(file);
+    public ResponseEntity<byte[]> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("test.pdf").build().toString());
-        return ResponseEntity.ok().headers(httpHeaders).body(this.bulkTrackingService.getResultFile(file1).getBytes());
+        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("TrackingResults.xlsx").build().toString());
+        return ResponseEntity.ok().headers(httpHeaders).body(this.bulkTrackingService.getResults(file));
     }
 }
