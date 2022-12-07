@@ -5,6 +5,7 @@ import FedExTrackerChecker.excel.ExcelUtils;
 import FedExTrackerChecker.requests.FedExRequest;
 import com.uixneg0.fedextrackingserver.entities.OAuth;
 import com.uixneg0.fedextrackingserver.repositories.OAuthRepository;
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.hibernate.result.Outputs;
@@ -30,7 +31,7 @@ public class BulkTrackingService {
      * Gets an Apache POI workbook based off the parsed list of tracking numbers, returns a byte array based on the workbook.
      */
     public byte[] getResults(MultipartFile multipartFile){
-        if (multipartFile == null || multipartFile.getOriginalFilename() == null) return null;
+        if (!validateFile(multipartFile)) return null;
         OAuth oAuth = this.oAuthRepository.findTopByOrderByIdDesc();
         Long currentTime = System.currentTimeMillis();
         if (oAuth == null || oAuth.getExpirationTime() < currentTime){
@@ -61,5 +62,13 @@ public class BulkTrackingService {
         }
 
         return outputStream.toByteArray();
+    }
+
+    private boolean validateFile(MultipartFile multipartFile){
+        if (multipartFile == null) return false;
+        String originalFileName = multipartFile.getOriginalFilename();
+        if (originalFileName == null) return false;
+        String ext = FileNameUtils.getExtension(multipartFile.getOriginalFilename());
+        return ext.contains("xlsx") || ext.contains("xlsm");
     }
 }
