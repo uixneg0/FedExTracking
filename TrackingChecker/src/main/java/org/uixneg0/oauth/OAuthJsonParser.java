@@ -12,7 +12,7 @@ import java.util.HashMap;
 @Getter
 public class OAuthJsonParser {
 	public static OAuthJson readJson() {
-		File file = new File(System.getProperty("user.dir") + "/FedExTrackingServer/src/main/resources/oauth.json");
+		File file = new File(System.getProperty("user.dir") + "/oauth.json");
 		if (file.exists()) {
 			try {
 				Gson gson = new Gson();
