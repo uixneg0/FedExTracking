@@ -21,7 +21,7 @@ public class BulkTrackingController {
 
 	@GetMapping("/")
 	public String listUploadedFiles() {
-		return "uploadForm";
+		return "upload-form";
 	}
 
 	@PostMapping("/upload")
