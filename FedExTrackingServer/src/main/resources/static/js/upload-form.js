@@ -1,15 +1,13 @@
-document.addEventListener("DOMContentLoaded", () => {
-    $("#submit").click((e) => {
+document.addEventListener("DOMContentLoaded", function () {
+    $("#submit").click(function (e) {
         e.preventDefault();
         e.target.setAttribute('disabled', 'true');
-
-        var form = $("form").get(0) as HTMLFormElement;
-        const formData = new FormData(form);
-
+        var form = $("form").get(0);
+        var formData = new FormData(form);
         fetch('/upload', {
             method: "POST",
             body: formData,
-        }).then(response => {
+        }).then(function (response) {
             e.target.removeAttribute('disabled');
             // Extract the filename from the Content-Disposition header
             var filename = '';
@@ -21,21 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     filename = matches[1].replace(/['"]/g, '');
                 }
             }
-
             // Parse the response as a Blob object
-            response.blob().then(blob => {
+            response.blob().then(function (blob) {
                 // Create a link element to trigger the download
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = filename; // Set the download attribute to the original filename
-
                 // Add the link element to the document and click it
                 document.body.appendChild(link);
                 link.click();
             });
-        }).catch(response => {
+        }).catch(function (response) {
             e.target.removeAttribute('disabled');
         });
-    })
+    });
 });
-
